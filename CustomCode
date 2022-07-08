@@ -5,7 +5,7 @@ import { Video } from 'expo-av';
 import PhoneInput from "react-native-phone-number-input";
 
 
-export { useValues } from './config/GlobalVariableContext';
+
 
 const ShareBtn = ({children, media_url}) => {
   
@@ -37,14 +37,16 @@ const ShareBtn = ({children, media_url}) => {
 
 export { ShareBtn };
 
-export const CustomVideo = ({startingPoint, media_url}) => {
+export const CustomVideo = ({startingPoint, media_url, current_id, story_id}) => {
+  if (current_id !== story_id) {
+    startingPoint = 0;
+  } 
   return (
       <Video
       style={styles.Videoar}
       source={{ uri: `${media_url}` }}
       resizeMode={'cover'}
       useNativeControls={true}
-      usePoster={false}
       shouldPlay={false}
       positionMillis={startingPoint}
     />
