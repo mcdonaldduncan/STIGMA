@@ -3,9 +3,7 @@ import { Share, StyleSheet, View, Button } from 'react-native';
 import { Touchable } from '@draftbit/ui';
 import { Video } from 'expo-av';
 import PhoneInput from "react-native-phone-number-input";
-
-
-
+import call from 'react-native-phone-call';
 
 const ShareBtn = ({children, media_url}) => {
   
@@ -36,6 +34,25 @@ const ShareBtn = ({children, media_url}) => {
 };
 
 export { ShareBtn };
+
+
+export const PhoneButton = ({num, children}) => {
+  
+  const triggerCall = () => {
+    const args = {
+      number: num,
+      prompt: true,
+    };
+    call(args).catch(console.error);
+  };
+
+  return (
+    <Touchable onPress={triggerCall}>
+    {children}
+    </Touchable>
+  )
+};
+
 
 export const CustomVideo = ({startingPoint, media_url, current_id, story_id}) => {
   if (current_id !== story_id) {
