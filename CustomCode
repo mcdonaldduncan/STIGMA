@@ -1,5 +1,5 @@
 import React from 'react';
-import { Share, View, Button } from 'react-native';
+import { Share, StyleSheet, View, Button } from 'react-native';
 import { Touchable } from '@draftbit/ui';
 import { Video } from 'expo-av';
 import PhoneInput from "react-native-phone-number-input";
@@ -7,12 +7,12 @@ import PhoneInput from "react-native-phone-number-input";
 
 export { useValues } from './config/GlobalVariableContext';
 
-const ShareBtn = props => {
+const ShareBtn = ({children, media_url}) => {
   
   const handleShare = async () => {
     try {
       const result = await Share.share({
-        message: `this is a temp message`,
+        message: `${media_url}`,
       });
       if (result.action === Share.sharedAction) {
         if (result.activityType) {
@@ -28,13 +28,10 @@ const ShareBtn = props => {
     }
   };
   return (
-    <Touchable
-      onPress={handleShare}
-      style={{
-        outerWidth: 100,
-        outerHeight: 100
-      }}
-    />
+    <Touchable onPress={handleShare}>
+    {children}
+    </Touchable>
+    
   );
 };
 
@@ -57,6 +54,6 @@ export const CustomVideo = ({startingPoint, media_url}) => {
 
 const styles = StyleSheet.create({
   Videoar: {
-    height: '95%',
+    height: '100%',
   },
-})
+});
