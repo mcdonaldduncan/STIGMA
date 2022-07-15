@@ -1,6 +1,6 @@
 import React, { useState, useRef } from 'react';
 import { Share, StyleSheet, Linking, View, Button, StatusBar, TouchableOpacity, Text, SafeAreaView } from 'react-native';
-import { Touchable } from '@draftbit/ui';
+import { Touchable, Swiper, SwiperItem } from '@draftbit/ui';
 import { Video } from 'expo-av';
 import PhoneInput from "react-native-phone-number-input";
 import call from 'react-native-phone-call';
@@ -106,6 +106,212 @@ export const CustomVideo = ({startingPoint, media_url, current_id, story_id}) =>
   )
 }
 
+export const CustomSwiper = ({data}) => {
+  return(
+     <Swiper
+        style={styles.SwiperIX}
+        dotColor="red"
+        dotActiveColor="blue"
+        dotsTouchable={true}
+        vertical={true}
+      >
+      {data.map(item =>  {
+
+        return (
+            <SwiperItem style={styles.SwiperItemyJ}>
+              <>
+                {!EvaluateTagFilters(item) ? null : (
+                  <View style={styles.View_9J}>
+                    <CustomVideo 
+                      startingPoint={item.currentTime} 
+                      media_url={item.preferred_chapter.media_url}
+                    />
+                    <View style={styles.ViewM9}>
+                      <View style={styles.ViewPb}>
+                        <Touchable
+                          onPress={async () => {
+                            try {
+                              await trackPOST.mutateAsync({
+                                app_id: Constants['App_Id'],
+                                event_type: 'Click - Save',
+                                member_id: Constants['_User_Id'],
+                                property_object: {},
+                              });
+                              setDisplayModal2(true);
+                              const shouldStop = CheckIDSelected(
+                                item?.story_id
+                              );
+                              if (shouldStop) {
+                                return;
+                              }
+                              setStartTime(0);
+                              setCurrent_id(item?.story_id);
+                            } catch (err) {
+                              console.error(err);
+                            }
+                          }}
+                        >
+                          <View>
+                            <Image
+                              style={styles.ImageIe}
+                              source={Images.Property1whiteProperty2STIGMA}
+                              resizeMode={'cover'}
+                            />
+                          </View>
+                        </Touchable>
+                      </View>
+
+                      <View style={styles.View_50}>
+                        <Utils.CustomCodeErrorBoundary>
+                          <CustomCode.ShareBtn
+                            media_url={item.preferred_chapter.media_url}
+                          >
+                            <View>
+                              <Image
+                                style={styles.Imageah}
+                                source={Images.Share}
+                                resizeMode={'cover'}
+                              />
+                            </View>
+                          </CustomCode.ShareBtn>
+                        </Utils.CustomCodeErrorBoundary>
+                      </View>
+
+                      <View style={styles.ViewZd}>
+                        <Touchable
+                          onPress={async () => {
+                            try {
+                              await trackPOST.mutateAsync({
+                                app_id: Constants['App_Id'],
+                                event_type: 'Click - Save',
+                                member_id: Constants['_User_Id'],
+                                property_object: {},
+                              });
+                            } catch (err) {
+                              console.error(err);
+                            }
+                          }}
+                        >
+                          <View>
+                            <Image
+                              style={styles.ImageBc}
+                              source={Images.Banner}
+                              resizeMode={'cover'}
+                            />
+                          </View>
+                        </Touchable>
+                      </View>
+
+                      <View>
+                        <Touchable
+                          onPress={async () => {
+                            try {
+                              await trackPOST.mutateAsync({
+                                app_id: Constants['App_Id'],
+                                event_type: 'Click - More',
+                                member_id: Constants['_User_Id'],
+                                property_object: {},
+                              });
+                              setDisplayModal(true);
+                            } catch (err) {
+                              console.error(err);
+                            }
+                          }}
+                        >
+                          <View>
+                            <Image
+                              style={styles.Image_7g}
+                              source={Images.More}
+                              resizeMode={'cover'}
+                            />
+                          </View>
+                        </Touchable>
+                      </View>
+                    </View>
+
+                    <View style={styles.Viewjy}>
+                      <View style={styles.ViewFT} removeClippedSubviews={false}>
+                        <Touchable
+                          onPress={async () => {
+                            try {
+                              await trackPOST.mutateAsync({
+                                app_id: Constants['App_Id'],
+                                event_type: 'View - ',
+                                member_id: Constants['_User_Id'],
+                                property_object: {},
+                              });
+                              setShowFull(!showFull);
+                            } catch (err) {
+                              console.error(err);
+                            }
+                          }}
+                        >
+                          <View style={styles.Viewfj}>
+                            <View style={styles.View_45}>
+                              <Text
+                                style={[
+                                  styles.TextAD,
+                                  { color: theme.colors.primary_light },
+                                ]}
+                              >
+                                {item?.title}
+                                {"'s Story"}
+                              </Text>
+                              <>
+                                {showFull ? null : (
+                                  <Text
+                                    style={[
+                                      styles.Textqj,
+                                      { color: theme.colors.mediumInverse },
+                                    ]}
+                                    numberOfLines={2}
+                                  >
+                                    {item?.preferred_chapter?.summary}
+                                  </Text>
+                                )}
+                              </>
+                              <>
+                                {!showFull ? null : (
+                                  <Text
+                                    style={[
+                                      styles.TextSf,
+                                      { color: theme.colors.mediumInverse },
+                                    ]}
+                                  >
+                                    {item?.preferred_chapter?.summary}
+                                  </Text>
+                                )}
+                              </>
+                            </View>
+                            <>
+                              {showFull ? null : (
+                                <View style={styles.Viewan}>
+                                  <Text
+                                    style={[
+                                      styles.TexttT,
+                                      { color: theme.colors.primary_light },
+                                    ]}
+                                  >
+                                    {'See More...'}
+                                  </Text>
+                                </View>
+                              )}
+                            </>
+                          </View>
+                        </Touchable>
+                      </View>
+                    </View>
+                  </View>
+                )}
+              </>
+          </SwiperItem>
+        )
+      })}      
+      </Swiper>
+  )
+  
+}
+
 export const phoneInput = ({currentNum}) => {
   const [value, setValue] = useState("");
   const [formattedValue, setFormattedValue] = useState("");
@@ -162,5 +368,510 @@ export const phoneInput = ({currentNum}) => {
 const styles = StyleSheet.create({
   Videoar: {
     height: '100%',
+  },
+  SwiperIX: {
+    height: `81%`,
+    width: '100%',
+  },
+  SwiperItemyJ: {
+    alignItems: 'center',
+  },
+  IconCA: {
+    marginBottom: 3,
+  },
+  TextWy: {
+    textAlign: 'center',
+    textTransform: 'capitalize',
+    fontSize: 16,
+    fontFamily: 'Poppins_400Regular',
+  },
+  ViewXs: {
+    flexDirection: 'row',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  View_2s: {
+    alignContent: 'center',
+    flexDirection: 'row',
+    position: 'absolute',
+    right: '80%',
+  },
+  TextPo: {
+    alignSelf: 'center',
+    fontFamily: 'Poppins_600SemiBold',
+    textAlign: 'center',
+    textTransform: 'capitalize',
+    fontSize: 16,
+  },
+  Text_9C: {
+    fontFamily: 'Poppins_400Regular',
+    fontSize: 16,
+  },
+  ViewjS: {
+    position: 'absolute',
+    left: '80%',
+  },
+  View_1p: {
+    height: 90,
+    width: '100%',
+    alignItems: 'center',
+    justifyContent: 'center',
+    flexDirection: 'row',
+    position: 'absolute',
+    zIndex: 3,
+  },
+  ImageVR: {
+    width: 36,
+    height: 36,
+  },
+  ViewxH: {
+    marginBottom: 20,
+  },
+  Imagebf: {
+    width: 36,
+    height: 36,
+  },
+  ViewDA: {
+    marginBottom: 20,
+  },
+  Imagee7: {
+    width: 36,
+    height: 36,
+  },
+  ViewXR: {
+    marginBottom: 20,
+  },
+  ImageSt: {
+    width: 36,
+    height: 36,
+  },
+  Viewyo: {
+    position: 'absolute',
+    right: 20,
+    bottom: 120,
+  },
+  Textkd: {
+    fontFamily: 'Poppins_500Medium',
+  },
+  TextHn: {
+    fontFamily: 'Poppins_400Regular',
+  },
+  Textzn: {
+    fontFamily: 'Poppins_400Regular',
+  },
+  ViewXz: {
+    width: '80%',
+    height: '100%',
+  },
+  TextUu: {
+    fontFamily: 'Poppins_400Regular',
+  },
+  Vieweq: {
+    justifyContent: 'flex-end',
+  },
+  Viewkx: {
+    flexDirection: 'row',
+  },
+  ViewXk: {
+    justifyContent: 'flex-end',
+    width: 100,
+    width: '100%',
+  },
+  ViewyI: {
+    position: 'absolute',
+    top: 16,
+    left: 16,
+    width: '90%',
+    flexDirection: 'row',
+  },
+  ViewMR: {
+    marginTop: 90,
+  },
+  Fetchub: {
+    minHeight: 40,
+  },
+  FlatListJEContent: {
+    flex: 1,
+  },
+  Image_7P: {
+    width: 36,
+    height: 36,
+  },
+  ViewMY: {
+    marginBottom: 20,
+  },
+  Image_2a: {
+    width: 36,
+    height: 36,
+  },
+  Viewmk: {
+    marginBottom: 20,
+  },
+  Imagezf: {
+    width: 36,
+    height: 36,
+  },
+  ViewXS: {
+    marginBottom: 20,
+  },
+  ImageUO: {
+    width: 36,
+    height: 36,
+  },
+  ViewUc: {
+    position: 'absolute',
+    right: 20,
+    bottom: 120,
+  },
+  Text_6Y: {
+    fontFamily: 'Poppins_500Medium',
+  },
+  TextzR: {
+    fontFamily: 'Poppins_400Regular',
+  },
+  Text_4J: {
+    fontFamily: 'Poppins_400Regular',
+  },
+  Viewgj: {
+    width: '80%',
+    height: '100%',
+  },
+  Textor: {
+    fontFamily: 'Poppins_400Regular',
+  },
+  ViewTM: {
+    justifyContent: 'flex-end',
+  },
+  ViewZ9: {
+    flexDirection: 'row',
+  },
+  ViewDf: {
+    justifyContent: 'flex-end',
+    width: 100,
+    width: '100%',
+  },
+  View_6W: {
+    position: 'absolute',
+    top: 16,
+    left: 16,
+    width: '90%',
+    flexDirection: 'row',
+  },
+  ViewOg: {
+    marginTop: 10,
+    height: 600,
+  },
+  FlatListZXContent: {
+    flex: 1,
+  },
+  Fetch_3v: {
+    minHeight: 40,
+  },
+  ScrollViewsRContent: {
+    paddingBottom: 300,
+    marginTop: 90,
+  },
+  Divider_7q: {
+    height: 3,
+  },
+  Viewb1: {
+    alignSelf: 'center',
+    width: '15%',
+    marginTop: 10,
+  },
+  ButtonSolidQ7: {
+    fontFamily: 'Poppins_600SemiBold',
+    textAlign: 'center',
+    marginBottom: 2,
+    fontSize: 16,
+    height: 60,
+  },
+  ButtonSolidmq: {
+    fontFamily: 'Poppins_600SemiBold',
+    textAlign: 'center',
+    height: 60,
+    fontSize: 16,
+  },
+  Viewbj: {
+    marginTop: 20,
+    alignSelf: 'center',
+    width: '90%',
+  },
+  ViewaC: {
+    width: '100%',
+    height: 400,
+    position: 'absolute',
+    top: '75%',
+  },
+  Dividerzs: {
+    height: 3,
+  },
+  ViewZt: {
+    alignSelf: 'center',
+    width: '15%',
+    marginTop: 10,
+  },
+  ButtonSolidY6: {
+    fontFamily: 'Poppins_600SemiBold',
+    textAlign: 'center',
+    marginBottom: 2,
+    fontSize: 16,
+    height: 60,
+  },
+  ButtonSolidb8: {
+    fontFamily: 'Poppins_600SemiBold',
+    textAlign: 'center',
+    height: 60,
+    fontSize: 16,
+  },
+  ViewGL: {
+    marginTop: 20,
+    alignSelf: 'center',
+    width: '90%',
+  },
+  ViewnA: {
+    width: '100%',
+    height: 400,
+    position: 'absolute',
+    top: '75%',
+  },
+  Divider_4y: {
+    height: 3,
+  },
+  ViewPN: {
+    alignSelf: 'center',
+    width: '15%',
+    marginTop: 10,
+  },
+  IconuJ: {
+    marginLeft: 8,
+  },
+  TextInputlW: {
+    paddingLeft: 8,
+    paddingRight: 8,
+    paddingTop: 8,
+    paddingBottom: 8,
+    borderRadius: 8,
+    width: '100%',
+    fontFamily: 'Poppins_400Regular',
+    fontSize: 16,
+  },
+  View_5G: {
+    flexDirection: 'row',
+    width: '90%',
+    alignSelf: 'center',
+    alignItems: 'center',
+    marginTop: '10%',
+  },
+  IconWM: {
+    position: 'absolute',
+    right: 4,
+  },
+  TextIC: {
+    fontFamily: 'Poppins_400Regular',
+    fontSize: 16,
+  },
+  ViewEa: {
+    width: '90%',
+  },
+  ViewYH: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    minHeight: 40,
+    borderBottomWidth: 0.3,
+  },
+  FlatListVBContent: {
+    flex: 1,
+  },
+  ViewkC: {
+    width: '90%',
+    alignSelf: 'center',
+    marginTop: '5%',
+    paddingLeft: 8,
+    paddingRight: 8,
+  },
+  KeyboardAwareScrollViewb5Content: {
+    paddingBottom: 250,
+  },
+  ViewDb: {
+    width: '100%',
+    height: 900,
+    position: 'absolute',
+    top: '20%',
+  },
+  Imagee8: {
+    zIndex: 4,
+    width: 24,
+    height: 24,
+  },
+  TextkI: {
+    alignSelf: 'center',
+    textAlign: 'center',
+    textTransform: 'capitalize',
+    fontFamily: 'Poppins_500Medium',
+    fontSize: 10,
+  },
+  ViewW3: {
+    overflow: 'hidden',
+    alignItems: 'center',
+    alignContent: 'center',
+    justifyContent: 'center',
+  },
+  Touchablepg: {
+    width: 45,
+    height: 40,
+  },
+  ImageYQ: {
+    zIndex: 4,
+    width: 24,
+    height: 24,
+  },
+  TextAK: {
+    alignSelf: 'center',
+    textAlign: 'center',
+    textTransform: 'capitalize',
+    fontSize: 10,
+    fontFamily: 'Poppins_500Medium',
+  },
+  ViewXW: {
+    overflow: 'hidden',
+    alignItems: 'center',
+    alignContent: 'center',
+    justifyContent: 'center',
+  },
+  TouchablexK: {
+    width: 45,
+    height: 40,
+    marginLeft: '14%',
+  },
+  ImageZD: {
+    zIndex: 4,
+    width: 24,
+    height: 24,
+  },
+  Text_69: {
+    alignSelf: 'center',
+    textAlign: 'center',
+    textTransform: 'capitalize',
+    fontFamily: 'Poppins_500Medium',
+    fontSize: 10,
+  },
+  Viewqh: {
+    overflow: 'hidden',
+    alignItems: 'center',
+    alignContent: 'center',
+    justifyContent: 'center',
+  },
+  TouchableUV: {
+    width: 45,
+    height: 40,
+    marginLeft: '14%',
+  },
+  Image_1O: {
+    zIndex: 4,
+    width: 24,
+    height: 24,
+  },
+  TextwO: {
+    alignSelf: 'center',
+    textAlign: 'center',
+    textTransform: 'capitalize',
+    fontFamily: 'Poppins_500Medium',
+    fontSize: 10,
+  },
+  Viewnx: {
+    overflow: 'hidden',
+    alignItems: 'center',
+    alignContent: 'center',
+    justifyContent: 'center',
+  },
+  Touchable_2l: {
+    width: 45,
+    height: 40,
+    marginLeft: '14%',
+  },
+  View_3a: {
+    zIndex: 5,
+    position: 'absolute',
+    width: '100%',
+    height: '13%',
+    flexDirection: 'row',
+    top: '87%',
+    alignItems: 'center',
+    justifyContent: 'center',
+    paddingBottom: 15,
+  },
+  ImageIe: {
+    width: 36,
+    height: 36,
+  },
+  ViewPb: {
+    marginBottom: 20,
+  },
+  Imageah: {
+    width: 36,
+    height: 36,
+  },
+  View_50: {
+    marginBottom: 20,
+  },
+  ImageBc: {
+    width: 36,
+    height: 36,
+  },
+  ViewZd: {
+    marginBottom: 20,
+  },
+  Image_7g: {
+    width: 36,
+    height: 36,
+  },
+  ViewM9: {
+    position: 'absolute',
+    right: 20,
+    bottom: 120,
+  },
+  TextAD: {
+    fontFamily: 'Poppins_500Medium',
+  },
+  Textqj: {
+    fontFamily: 'Poppins_400Regular',
+  },
+  TextSf: {
+    fontFamily: 'Poppins_400Regular',
+  },
+  View_45: {
+    width: '80%',
+    height: '100%',
+  },
+  TexttT: {
+    fontFamily: 'Poppins_400Regular',
+  },
+  Viewan: {
+    justifyContent: 'flex-end',
+  },
+  Viewfj: {
+    flexDirection: 'row',
+  },
+  ViewFT: {
+    justifyContent: 'flex-end',
+    width: 100,
+    width: '100%',
+  },
+  Viewjy: {
+    position: 'absolute',
+    top: 16,
+    left: 16,
+    width: '90%',
+    flexDirection: 'row',
+  },
+  View_9J: {
+    marginTop: 10,
+    height: 600,
+  },
+  SwiperKc: {
+    height: 300,
+    width: '100%',
+    marginTop: 90,
   },
 });
